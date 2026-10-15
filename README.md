@@ -37,10 +37,13 @@ pnpm lint      # linter
 ```
 src/
   app/
-    layout.tsx      # layout raíz: fuente, metadata, script de Tailwind CDN
+    layout.tsx      # layout raíz: fuente, metadata/SEO, JSON-LD, Tailwind CDN
     page.tsx        # ensambla las secciones
     globals.css     # CSS crítico (sin directivas de Tailwind)
     icon.svg        # favicon
+    robots.ts       # robots.txt (SEO)
+    sitemap.ts      # sitemap.xml (SEO)
+    opengraph-image.png / twitter-image.png  # tarjeta al compartir el enlace
   components/
     Header.tsx      # header fijo con navegación por anclas
     SobreMi.tsx     # 01 — intro + foto
@@ -49,6 +52,8 @@ src/
     Contacto.tsx    # 04 — contacto (footer)
   lib/
     data.ts         # todos los datos editables del portafolio
+    seo.ts          # URL del sitio y textos SEO compartidos
+  proxy.ts          # límite de peticiones por IP (seguridad)
 public/
   self-image.png    # foto personal
   proyectos/*.png   # capturas de los proyectos
@@ -65,6 +70,31 @@ Para actualizar textos, proyectos, enlaces o tecnologías, edita únicamente
 4. **Proyectos** — 6 proyectos con captura, descripción y enlaces
    (demo en GitHub Pages + repositorio)
 5. **Contacto** — correo, GitHub y LinkedIn
+
+## Seguridad: límite de peticiones
+
+`src/proxy.ts` limita a **60 peticiones por minuto y por IP** (ventana
+deslizante). Al superarlo responde `429` con `Retry-After`. Los archivos
+estáticos (imágenes, iconos, css, robots.txt, sitemap.xml) están excluidos del
+conteo para que nunca se bloquee un recurso.
+
+> El contador vive en memoria del servidor: aplica por instancia. En Vercel
+> funciona como disuasor de bots y abuso simple; la plataforma ya incluye
+> protección DDoS a nivel de red. Para límites estrictos se necesitaría un
+> almacén externo (Upstash, WAF), fuera del alcance de este ejercicio.
+
+## SEO
+
+- Metadatos completos en `src/app/layout.tsx` (keywords, autor, canonical,
+  robots, OpenGraph `es_ES`, Twitter card).
+- `opengraph-image.png` / `twitter-image.png`: tarjeta 1200×630 al compartir.
+- `robots.txt` y `sitemap.xml` generados con las convenciones de Next.
+- Datos estructurados JSON-LD (`Person`) con nombre, rol y perfiles.
+
+La URL pública se resuelve en `src/lib/seo.ts`:
+`NEXT_PUBLIC_SITE_URL` → `VERCEL_PROJECT_PRODUCTION_URL` (automática en Vercel)
+→ `localhost`. Si usas dominio propio, define `NEXT_PUBLIC_SITE_URL` en Vercel
+(Settings → Environment Variables) y vuelve a desplegar.
 
 ## Deploy en Vercel
 
