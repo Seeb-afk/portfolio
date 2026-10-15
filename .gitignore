@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# archivos opcionales del ejercicio (no se suben al repositorio)
+/datos.txt
+/Ejercicio_Portafolio_FullStack.pdf
+/self-image.png

@@ -1,0 +1,37 @@
+:root {
+  color-scheme: light;
+}
+
+/*
+ * CSS crítico que se aplica antes de que cargue Tailwind (CDN):
+ * mantiene la página legible y sin saltos mientras se genera el CSS en el navegador.
+ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: #f8fafc;
+  color: #0f172a;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Evita que el header fijo tape los títulos al navegar con anclas. */
+section[id],
+footer[id] {
+  scroll-margin-top: 5rem;
+}
+
+::selection {
+  background-color: #c7d2fe;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
